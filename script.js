@@ -54,29 +54,50 @@ function converterCSVparaArray(conteudoCSV) {
   linhas.forEach(function (linha) {
     // Substitui ponto e vírgula por vírgula na linha
     linha = linha.replace(/;/g, ',');
+    linha = linha.replace(/\r/g, '');
+    // linha = linha.replace(/H/g, '[1,0,0]').split(0,8);
     const valores = linha.split(',');
     if (valores.length > 0) { // Verifica se a linha não está vazia
       arrayCSV.push(valores);
     }
   });
   
-  var arrayCSV
-   = drop(arrayCSV
-    );
+  drop(arrayCSV);
+  arrayCSV.shift();
   console.log(arrayCSV);
 
+  console.log(convert(arrayCSV));
+
 }
-function drop(arrayCSV
-  ){
+// Dropa as colunas que eu não tenho interesse
+function drop(arrayCSV){
       var indice = 0;
-      while(arrayCSV
-        [indice] != undefined){
-        arrayCSV
-        [indice].splice(3,6);
-        arrayCSV
-        [indice].splice(0,1);
+
+      while(arrayCSV[indice] != undefined){
+        arrayCSV[indice].splice(0,8);
         indice++;
       }
-      return arrayCSV
-      ;
+
+      return arrayCSV;
+}
+
+// Função para converter o vencendor em numérioco
+
+function convert(arrayCSV){
+  var vitoriaMatriz = [];
+  var indice = 0;
+  while(arrayCSV[indice] != undefined){
+    if (arrayCSV[indice][0]==="H"){
+      vitoriaMatriz[indice] = [1,0,0]; 
+    }
+
+    if (arrayCSV[indice][0]==="D") {
+      vitoriaMatriz[indice] = [0,1,0]; 
+    }else{
+      vitoriaMatriz[indice] = [0,0,1]; 
+    }
+
+    indice++;
+  }
+  return vitoriaMatriz;
 }
