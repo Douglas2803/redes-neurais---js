@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="Matrix.js"></script>
+  <script src="RedeNeural.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <input type="file" id="csvFile" accept=".csv">
+  <button onclick="lerArquivoCSV(document.getElementById('csvFile').files[0])">Importar CSV</button>
+  <button onclick="executa()">treinar</button>
+  <div id="csvData"></div>
+  
+</body>
+</html>
