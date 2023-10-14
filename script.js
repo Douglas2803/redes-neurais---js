@@ -3,7 +3,7 @@ var nn;
 var dataset;
 
 function executa() {
-  nn = new RedeNeural(2, 3, 1);
+  nn = new RedeNeural(2, 3, 3);
 
   // XOR Problem
   dataset = {
@@ -18,6 +18,16 @@ function executa() {
       [1],
       [1],
       [0]
+    ]
+  }
+
+  console.log(dataset);
+  arrays = dropTreino(arrayCSV);
+  arrayoitenta = arrays[0];
+  arrayvinte = arrays[1];
+  datasetTreino = {
+    inputs: [
+
     ]
   }
 
@@ -61,14 +71,20 @@ function converterCSVparaArray(conteudoCSV) {
       arrayCSV.push(valores);
     }
   });
-  
+  var arrays = [];
   drop(arrayCSV);
   arrayCSV.shift();
   console.log(arrayCSV);
-
   console.log(convert(arrayCSV));
+  dropFirsColumn(arrayCSV);
+  arrays = dropTreino(arrayCSV);
+  arrayoitenta = arrays[0];
+  arrayvinte = arrays[1];
+  console.log(arrayoitenta);
+  console.log(arrayvinte);
 
 }
+
 // Dropa as colunas que eu não tenho interesse
 function drop(arrayCSV){
       var indice = 0;
@@ -81,6 +97,43 @@ function drop(arrayCSV){
       return arrayCSV;
 }
 
+function dropFirsColumn(arrayCSV){
+      var indice = 0;
+
+      while(arrayCSV[indice] != undefined){
+        arrayCSV[indice].splice(0,1);
+        indice++;
+      }
+
+      return arrayCSV;
+}
+
+function dropTreino(array){
+  x = 0;
+  cont = 0;
+  var arrayoitenta = [];
+  var arrayvinte = [];
+
+  while(array[x] != undefined){
+    cont++;
+    x++;
+  }
+  oitenta = cont*0.8;
+
+  for (let i = 0; i < oitenta; i++) {
+    arrayoitenta[i] = array[i];
+  }
+
+  var contvinte = oitenta;
+
+  while(array[contvinte] != undefined){
+    arrayvinte[contvinte] = array[contvinte];
+    contvinte++;
+  }
+
+  return [arrayoitenta,arrayvinte];
+}
+
 // Função para converter o vencendor em numérioco
 
 function convert(arrayCSV){
@@ -90,8 +143,7 @@ function convert(arrayCSV){
     if (arrayCSV[indice][0]==="H"){
       vitoriaMatriz[indice] = [1,0,0]; 
     }
-
-    if (arrayCSV[indice][0]==="D") {
+    else if (arrayCSV[indice][0]==="D") {
       vitoriaMatriz[indice] = [0,1,0]; 
     }else{
       vitoriaMatriz[indice] = [0,0,1]; 
