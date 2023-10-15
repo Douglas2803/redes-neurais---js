@@ -1,41 +1,50 @@
 var train = true;
 var nn;
 var dataset;
+var globalArrays = {
+  arrayoitenta: [],
+  arrayvinte: [],
+  arrayvitoria: [],
+  
+};
 
 function executa() {
-  nn = new RedeNeural(2, 3, 1);
+  nn = new RedeNeural(12, 4, 3);
 
-  // XOR Problem
-  dataset = {
-    inputs: [
-      [1, 1],
-      [1, 0],
-      [0, 1],
-      [0, 0]
-    ],
-    outputs: [
-      [0],
-      [1],
-      [1],
-      [0]
-    ]
-  }
+  
+  // 4864
 
   while (train) {
     for (var i = 0; i < 10000; i++) {
-      var index = Math.floor(Math.random() * 4);
-      nn.train(dataset.inputs[index], dataset.outputs[index]);
+      var index = Math.floor(Math.random() * 4864);
+      nn.train(globalArrays.arrayoitenta[index], globalArrays.arrayvitoria[index]);
     }
-    if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
+
+    if (nn.predict(globalArrays.arrayvitoria[index])[0] > 0.98) {
       train = false;
       console.log("terminou");
     }
+
+    // if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
+    //   train = false;
+    //   console.log("terminou");
+    //
   }
+
+  // while (train) {
+  // for (var i = 0; i < 10000; i++) {
+  //   var index = Math.floor(Math.random() * 4);
+  //   nn.train(dataset.inputs[index], dataset.outputs[index]);
+  //   }
+  //   if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
+  //     train = false;
+  //     console.log("terminou");
+  //   }
+  // }
 
   // Exemplo de como exibir algo na div "csvData"
   document.getElementById("csvData").textContent = "Treinamento concluído.";
 }
-
 function lerArquivoCSV(arquivo) {
   const leitor = new FileReader();
 
@@ -61,14 +70,21 @@ function converterCSVparaArray(conteudoCSV) {
       arrayCSV.push(valores);
     }
   });
-  
+
   drop(arrayCSV);
   arrayCSV.shift();
-  console.log(arrayCSV);
+  arrayvitoria = convert(arrayCSV);
+  dropFirsColumn(arrayCSV);
+  var arrays = dropTreino(arrayCSV);
+  arrayoitenta = arrays[0];
+  arrayvinte = arrays[1];
+  globalArrays.arrayoitenta = arrays[0];
+  globalArrays.arrayvinte = arrays[1];
+  globalArrays.arrayvitoria = arrayvitoria;
 
-  console.log(convert(arrayCSV));
 
 }
+
 // Dropa as colunas que eu não tenho interesse
 function drop(arrayCSV){
       var indice = 0;
@@ -81,6 +97,43 @@ function drop(arrayCSV){
       return arrayCSV;
 }
 
+function dropFirsColumn(arrayCSV){
+      var indice = 0;
+
+      while(arrayCSV[indice] != undefined){
+        arrayCSV[indice].splice(0,1);
+        indice++;
+      }
+
+      return arrayCSV;
+}
+
+function dropTreino(array){
+  x = 0;
+  cont = 0;
+  var arrayoitenta = [];
+  var arrayvinte = [];
+
+  while(array[x] != undefined){
+    cont++;
+    x++;
+  }
+  oitenta = cont*0.8;
+
+  for (let i = 0; i < oitenta; i++) {
+    arrayoitenta[i] = array[i];
+  }
+
+  var contvinte = oitenta;
+
+  while(array[contvinte] != undefined){
+    arrayvinte[contvinte] = array[contvinte];
+    contvinte++;
+  }
+
+  return [arrayoitenta,arrayvinte];
+}
+
 // Função para converter o vencendor em numérioco
 
 function convert(arrayCSV){
@@ -90,8 +143,7 @@ function convert(arrayCSV){
     if (arrayCSV[indice][0]==="H"){
       vitoriaMatriz[indice] = [1,0,0]; 
     }
-
-    if (arrayCSV[indice][0]==="D") {
+    else if (arrayCSV[indice][0]==="D") {
       vitoriaMatriz[indice] = [0,1,0]; 
     }else{
       vitoriaMatriz[indice] = [0,0,1]; 
