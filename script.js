@@ -9,10 +9,23 @@ var globalArrays = {
 };
 
 function executa() {
-  nn = new RedeNeural(12, 4, 3);
+  nn = new RedeNeural(2, 3, 1);
 
-  
-  // 4864
+  // XOR Problem
+  dataset = {
+    inputs: [
+      [1, 1],
+      [1, 0],
+      [0, 1],
+      [0, 0]
+    ],
+    outputs: [
+      [0],
+      [1],
+      [1],
+      [0]
+    ]
+  }
 
   while (train) {
     for (var i = 0; i < 10000; i++) {
@@ -20,17 +33,18 @@ function executa() {
       nn.train(globalArrays.arrayoitenta[index], globalArrays.arrayvitoria[index]);
     }
 
-    if (nn.predict(globalArrays.arrayvitoria[index])[0] > 0.98) {
+    if (nn.predict(globalArrays.arrayoitenta)[0] > [0.98,0,0] && nn.predict(globalArrays.arrayoitenta)[2] > [0,0.98,0]
+    && nn.predict(globalArrays.arrayoitenta)[3] > [0,0,0.98]){
       train = false;
       console.log("terminou");
     }
 
-    // if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
-    //   train = false;
-    //   console.log("terminou");
-    //
+    if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
+      train = false;
+      console.log("terminou");
+    
   }
-
+}
   // while (train) {
   // for (var i = 0; i < 10000; i++) {
   //   var index = Math.floor(Math.random() * 4);
@@ -45,6 +59,17 @@ function executa() {
   // Exemplo de como exibir algo na div "csvData"
   document.getElementById("csvData").textContent = "Treinamento concluído.";
 }
+function lerArquivoCSV(arquivo) {
+  const leitor = new FileReader();
+
+  leitor.onload = function (evento) {
+    const conteudo = evento.target.result;
+    converterCSVparaArray(conteudo);
+  };
+
+  leitor.readAsText(arquivo);
+}
+
 function lerArquivoCSV(arquivo) {
   const leitor = new FileReader();
 
