@@ -1,6 +1,12 @@
 var train = true;
 var nn;
 var dataset;
+var globalArrays = {
+  arrayoitenta: [],
+  arrayvinte: [],
+  arrayvitoria: [],
+  
+};
 
 function executa() {
   nn = new RedeNeural(2, 3, 3);
@@ -33,17 +39,45 @@ function executa() {
 
   while (train) {
     for (var i = 0; i < 10000; i++) {
-      var index = Math.floor(Math.random() * 4);
-      nn.train(dataset.inputs[index], dataset.outputs[index]);
+      var index = Math.floor(Math.random() * 4864);
+      nn.train(globalArrays.arrayoitenta[index], globalArrays.arrayvitoria[index]);
     }
-    if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
+
+    if (nn.predict(globalArrays.arrayoitenta)[0] > [0.98,0,0] && nn.predict(globalArrays.arrayoitenta)[2] > [0,0.98,0]
+    && nn.predict(globalArrays.arrayoitenta)[3] > [0,0,0.98]){
       train = false;
       console.log("terminou");
     }
+
+    if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
+      train = false;
+      console.log("terminou");
+    
   }
+}
+  // while (train) {
+  // for (var i = 0; i < 10000; i++) {
+  //   var index = Math.floor(Math.random() * 4);
+  //   nn.train(dataset.inputs[index], dataset.outputs[index]);
+  //   }
+  //   if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
+  //     train = false;
+  //     console.log("terminou");
+  //   }
+  // }
 
   // Exemplo de como exibir algo na div "csvData"
   document.getElementById("csvData").textContent = "Treinamento concluído.";
+}
+function lerArquivoCSV(arquivo) {
+  const leitor = new FileReader();
+
+  leitor.onload = function (evento) {
+    const conteudo = evento.target.result;
+    converterCSVparaArray(conteudo);
+  };
+
+  leitor.readAsText(arquivo);
 }
 
 function lerArquivoCSV(arquivo) {
@@ -71,17 +105,20 @@ function converterCSVparaArray(conteudoCSV) {
       arrayCSV.push(valores);
     }
   });
-  var arrays = [];
+
+
   drop(arrayCSV);
   arrayCSV.shift();
-  console.log(arrayCSV);
-  console.log(convert(arrayCSV));
+  arrayvitoria = convert(arrayCSV);
   dropFirsColumn(arrayCSV);
-  arrays = dropTreino(arrayCSV);
+  var arrays = dropTreino(arrayCSV);
   arrayoitenta = arrays[0];
   arrayvinte = arrays[1];
-  console.log(arrayoitenta);
-  console.log(arrayvinte);
+  globalArrays.arrayoitenta = arrays[0];
+  globalArrays.arrayvinte = arrays[1];
+  globalArrays.arrayvitoria = arrayvitoria;
+
+
 
 }
 
