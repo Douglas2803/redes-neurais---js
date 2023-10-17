@@ -9,51 +9,51 @@ var globalArrays = {
 };
 
 function executa() {
-  nn = new RedeNeural(2, 3, 3);
-
-  // XOR Problem
-  dataset = {
-    inputs: [
-      [1, 1],
-      [1, 0],
-      [0, 1],
-      [0, 0]
-    ],
-    outputs: [
-      [0],
-      [1],
-      [1],
-      [0]
-    ]
-  }
-
-  console.log(dataset);
-  arrays = dropTreino(arrayCSV);
-  arrayoitenta = arrays[0];
-  arrayvinte = arrays[1];
-  datasetTreino = {
-    inputs: [
-
-    ]
-  }
+  nn = new RedeNeural(12, 3, 3);
 
   while (train) {
-    for (var i = 0; i < 10000; i++) {
+    // treina 10 mil vezes com indices randomicos  com 80% dos dados
+    for (var i = 0; i < 1000; i++) {
       var index = Math.floor(Math.random() * 4864);
       nn.train(globalArrays.arrayoitenta[index], globalArrays.arrayvitoria[index]);
     }
 
-    if (nn.predict(globalArrays.arrayoitenta)[0] > [0.98,0,0] && nn.predict(globalArrays.arrayoitenta)[2] > [0,0.98,0]
-    && nn.predict(globalArrays.arrayoitenta)[3] > [0,0,0.98]){
-      train = false;
-      console.log("terminou");
-    }
+    // Recupere a saída da rede neural
+const saidaRedeNeural = nn.predict(globalArrays.arrayoitenta);
 
-    if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
-      train = false;
-      console.log("terminou");
-    
+// Defina os três arrays de referência
+const arrayReferencia1 = [0.98, 0, 0];
+const arrayReferencia2 = [0, 0.98, 0];
+const arrayReferencia3 = [0, 0, 0.98];
+
+// Inicialize variáveis para rastrear se as comparações são verdadeiras para cada array de referência
+let comparação1 = false;
+let comparação2 = false;
+let comparação3 = false;
+
+
+  if (saidaRedeNeural[0] <= arrayReferencia1[0]) {
+    comparação1 = true;
   }
+  if (saidaRedeNeural[2] <= arrayReferencia2[1]) {
+    comparação2 = true;
+  }
+  if (saidaRedeNeural[3] <= arrayReferencia3[2]) {
+    comparação3 = true;
+  }
+
+
+if (comparação1 && comparação2 && comparação3) {
+  train = false;
+  console.log("terminou");
+} else {
+  console.log("A saída da rede neural não atende aos critérios de nenhum dos arrays de referência.");
+}
+  //   if (nn.predict([0, 0])[0] < 0.04 && nn.predict([1, 0])[0] > 0.98) {
+  //     train = false;
+  //     console.log("terminou");
+    
+  // }
 }
   // while (train) {
   // for (var i = 0; i < 10000; i++) {
@@ -96,16 +96,13 @@ function converterCSVparaArray(conteudoCSV) {
   var arrayCSV = [];
 
   linhas.forEach(function (linha) {
-    // Substitui ponto e vírgula por vírgula na linha
     linha = linha.replace(/;/g, ',');
     linha = linha.replace(/\r/g, '');
-    // linha = linha.replace(/H/g, '[1,0,0]').split(0,8);
     const valores = linha.split(',');
-    if (valores.length > 0) { // Verifica se a linha não está vazia
+    if (valores.length > 0) {
       arrayCSV.push(valores);
     }
   });
-
 
   drop(arrayCSV);
   arrayCSV.shift();
@@ -117,7 +114,6 @@ function converterCSVparaArray(conteudoCSV) {
   globalArrays.arrayoitenta = arrays[0];
   globalArrays.arrayvinte = arrays[1];
   globalArrays.arrayvitoria = arrayvitoria;
-
 
 
 }
