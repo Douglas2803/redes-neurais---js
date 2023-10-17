@@ -9,7 +9,7 @@ var globalArrays = {
 };
 
 function executa() {
-  nn = new RedeNeural(2, 3, 1);
+  nn = new RedeNeural(2, 3, 3);
 
   // XOR Problem
   dataset = {
@@ -24,6 +24,16 @@ function executa() {
       [1],
       [1],
       [0]
+    ]
+  }
+
+  console.log(dataset);
+  arrays = dropTreino(arrayCSV);
+  arrayoitenta = arrays[0];
+  arrayvinte = arrays[1];
+  datasetTreino = {
+    inputs: [
+
     ]
   }
 
@@ -96,6 +106,7 @@ function converterCSVparaArray(conteudoCSV) {
     }
   });
 
+
   drop(arrayCSV);
   arrayCSV.shift();
   arrayvitoria = convert(arrayCSV);
@@ -106,6 +117,7 @@ function converterCSVparaArray(conteudoCSV) {
   globalArrays.arrayoitenta = arrays[0];
   globalArrays.arrayvinte = arrays[1];
   globalArrays.arrayvitoria = arrayvitoria;
+
 
 
 }
