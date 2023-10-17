@@ -1,2 +1,2 @@
-﻿# redes-neurais---js
-## Este é um projeto de machine learning que utiliza uma tabela de jogos de futebol para realizar análises detalhadas das partidas e, com base em padrões e dados históricos, faz previsões sobre o provável vencedor do próximo jogo.
+﻿# redes-neurais-js
+## Este projeto de aprendizado de máquina consiste em importar um arquivo CSV contendo dados de partidas de jogos e, em seguida, conduzir análises minuciosas desses dados com base em padrões históricos. A partir dessas análises, o objetivo é fazer previsões sobre o potencial vencedor de futuras partidas.
